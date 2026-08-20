@@ -599,7 +599,7 @@ body.menu-open { overflow: hidden; }
   .site-header, .sticky-header { padding-inline: 15px; }
   .icon-btn { width: 40px; height: 40px; }
   .site-header .logo img { height: 32px; }
-  .slide-copy { left: 15px; bottom: 80px; }
+  .slide-copy { left: 15px; bottom: 80px; margin-top: 2rem; }
   .hero-window--sm {
     --x: 5%;
     --h: 78%;
