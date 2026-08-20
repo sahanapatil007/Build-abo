@@ -1,0 +1,90 @@
+HTTrack3.49-2+htsswf+htsjava launched on Thu, 20 Aug 2026 05:02:27 at https://demo.7iquid.com/alsha/ +demo.7iquid.com/alsha/* -demo.7iquid.com/alsha/home-02* -demo.7iquid.com/alsha/home-03* -demo.7iquid.com/alsha/home-04*
+("C:\Program Files\WinHTTrack\httrack.exe" https://demo.7iquid.com/alsha/ -O C:\Build-abo\original -%v -c8 -%! +demo.7iquid.com/alsha/* -demo.7iquid.com/alsha/home-02* -demo.7iquid.com/alsha/home-03* -demo.7iquid.com/alsha/home-04* )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+05:02:27	Warning: 	* security warning: !!! BYPASSING SECURITY LIMITS - MONITOR THIS SESSION WITH EXTREME CARE !!!
+05:03:15	Warning: 	Retry after error -4 (No data (connection closed)) at link https://demo.7iquid.com/alsha/xmlrpc.php?rsd (from https://demo.7iquid.com/alsha/)
+05:05:34	Warning: 	Retry after error -4 (No data (connection closed)) at link https://demo.7iquid.com/alsha/xmlrpc.php?rsd (from https://demo.7iquid.com/alsha/)
+05:05:35	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=3200
+05:05:35	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=3200 to https://demo.7iquid.com/alsha/about-us/
+05:05:35	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=3020
+05:05:35	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=3020 to https://demo.7iquid.com/alsha/about-me/
+05:05:35	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=2913
+05:05:35	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=2913 to https://demo.7iquid.com/alsha/process/
+05:05:35	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=2834
+05:05:35	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=2834 to https://demo.7iquid.com/alsha/pricing-plans/
+05:05:36	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=2720
+05:05:36	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=2720 to https://demo.7iquid.com/alsha/faqs/
+05:05:36	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=2467
+05:05:36	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=2467 to https://demo.7iquid.com/alsha/our-team/
+05:05:36	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=2401
+05:05:36	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=2401 to https://demo.7iquid.com/alsha/team-details/
+05:05:37	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=2053
+05:05:37	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=2053 to https://demo.7iquid.com/alsha/our-service/
+05:05:37	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1788
+05:05:37	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1788 to https://demo.7iquid.com/alsha/service-details/
+05:05:37	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1182
+05:05:37	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1182 to https://demo.7iquid.com/alsha/project-standard/
+05:05:41	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1153
+05:05:41	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1153 to https://demo.7iquid.com/alsha/project-grid/
+05:05:41	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1103
+05:05:41	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1103 to https://demo.7iquid.com/alsha/project-grid-wide/
+05:05:41	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1161
+05:05:41	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1161 to https://demo.7iquid.com/alsha/project-gallery/
+05:05:42	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1024
+05:05:42	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1024 to https://demo.7iquid.com/alsha/project-full-width/
+05:05:42	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=961
+05:05:42	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=961 to https://demo.7iquid.com/alsha/project-carousel/
+05:05:42	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=880
+05:05:42	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=880 to https://demo.7iquid.com/alsha/project-masonry/
+05:05:42	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=901
+05:05:42	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=901 to https://demo.7iquid.com/alsha/project/minimalist-urban-loft/
+05:05:42	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=517
+05:05:42	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=517 to https://demo.7iquid.com/alsha/project/urban-courtyard-retreat/
+05:05:42	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=515
+05:05:42	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=515 to https://demo.7iquid.com/alsha/project/modern-light-filled-apartment/
+05:05:42	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=426
+05:05:42	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=426 to https://demo.7iquid.com/alsha/project/hillside-private-residence/
+05:05:43	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1570
+05:05:43	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1570 to https://demo.7iquid.com/alsha/blog-column/
+05:06:04	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1719
+05:06:04	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1719 to https://demo.7iquid.com/alsha/blog-list/
+05:06:46	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1549
+05:06:46	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1549 to https://demo.7iquid.com/alsha/2026/04/27/designing-light-filled-homes-with-purpose/
+05:06:46	Warning: 	Retry after error -4 (No data (connection closed)) at link https://demo.7iquid.com/alsha/xmlrpc.php (from https://demo.7iquid.com/alsha/2026/04/27/designing-light-filled-homes-with-purpose/)
+05:06:46	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=61
+05:06:46	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=61 to https://demo.7iquid.com/alsha/contact/
+05:06:46	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=899
+05:06:46	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=899 to https://demo.7iquid.com/alsha/project/coastal-living-house/
+05:06:46	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=897
+05:06:46	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=897 to https://demo.7iquid.com/alsha/project/modern-villa-escape/
+05:06:46	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=523
+05:06:46	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=523 to https://demo.7iquid.com/alsha/project/quiet-courtyard-home/
+05:06:57	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1544
+05:06:57	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1544 to https://demo.7iquid.com/alsha/2026/04/27/designing-spaces-that-endure-time-and-context/
+05:07:00	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1538
+05:07:00	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1538 to https://demo.7iquid.com/alsha/2026/04/27/designing-architecture-with-purpose-and-precision-3/
+05:07:02	Error: 	"No data (connection closed)" (-4) after 2 retries at link https://demo.7iquid.com/alsha/xmlrpc.php?rsd (from https://demo.7iquid.com/alsha/)
+05:07:02	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=521
+05:07:02	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=521 to https://demo.7iquid.com/alsha/project/cliffside-living-house/
+05:07:02	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=519
+05:07:02	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=519 to https://demo.7iquid.com/alsha/project/soft-minimal-residence/
+05:07:02	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1520
+05:07:02	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1520 to https://demo.7iquid.com/alsha/2026/04/27/shaping-contemporary-living-through-spatial-clarity/
+05:07:02	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1514
+05:07:02	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1514 to https://demo.7iquid.com/alsha/2026/04/27/material-harmony-in-modern-home-design/
+05:07:10	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1532
+05:07:10	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1532 to https://demo.7iquid.com/alsha/2026/04/27/designing-architecture-with-purpose-and-precision-2/
+05:07:10	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1523
+05:07:10	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1523 to https://demo.7iquid.com/alsha/2026/04/27/designing-architecture-with-purpose-and-precision/
+05:07:32	Warning: 	Retry after error -4 (No data (connection closed)) at link https://demo.7iquid.com/alsha/xmlrpc.php (from https://demo.7iquid.com/alsha/2026/04/27/designing-light-filled-homes-with-purpose/)
+05:07:36	Warning: 	Moved Permanently for https://demo.7iquid.com/alsha/?p=1211
+05:07:36	Warning: 	File has moved from https://demo.7iquid.com/alsha/?p=1211 to https://demo.7iquid.com/alsha/2026/04/14/integrating-function-and-form-in-urban-spaces/
+05:07:43	Error: 	"No data (connection closed)" (-4) after 2 retries at link https://demo.7iquid.com/alsha/xmlrpc.php (from https://demo.7iquid.com/alsha/2026/04/27/designing-light-filled-homes-with-purpose/)
+
+HTTrack Website Copier/3.49-2 mirror complete in 5 minutes 16 seconds : 724 links scanned, 681 files written (48381278 bytes overall) [26565876 bytes received at 84069 bytes/sec], 27457488 bytes transferred using HTTP compression in 451 files, ratio 19%, 19.0 requests per connection
+(2 errors, 77 warnings, 0 messages)
