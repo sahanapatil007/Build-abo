@@ -77,25 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
     pagination: { el: ".hero-pagination", type: "progressbar" },
   });
 
-  new Swiper(".testimonial-swiper", {
-    effect: "fade",
-    fadeEffect: { crossFade: true },
-    speed: 750,
-    pagination: { el: ".testimonial-pagination", type: "progressbar" },
-  });
-
-  new Swiper(".client-swiper", {
-    slidesPerView: 3,
-    spaceBetween: 30,
-    loop: true,
-    speed: 350,
-    autoplay: { delay: 2200, disableOnInteraction: false },
-    breakpoints: {
-      576: { slidesPerView: 4 },
-      768: { slidesPerView: 5 },
-    },
-  });
-
   const teamSwiper = new Swiper(".team-swiper", {
     slidesPerView: 1,
     spaceBetween: 15,
@@ -108,6 +89,33 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   document.querySelectorAll("[data-team-prev]").forEach((el) => el.addEventListener("click", () => teamSwiper.slidePrev()));
   document.querySelectorAll("[data-team-next]").forEach((el) => el.addEventListener("click", () => teamSwiper.slideNext()));
+
+  const testimonialEl = document.querySelector(".testimonial-swiper");
+  if (testimonialEl) {
+    const originals = [...testimonialEl.querySelectorAll(".swiper-slide")];
+    originals.forEach((slide) => {
+      const clone = slide.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      testimonialEl.querySelector(".swiper-wrapper").appendChild(clone);
+    });
+    new Swiper(".testimonial-swiper", {
+      slidesPerView: "auto",
+      spaceBetween: 28,
+      loop: true,
+      speed: 8000,
+      grabCursor: true,
+      allowTouchMove: true,
+      autoplay: {
+        delay: 0,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      freeMode: {
+        enabled: true,
+        momentum: false,
+      },
+    });
+  }
 
   document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -129,7 +137,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll("[data-counter]").forEach((el) => {
     const end = Number(el.dataset.counter);
-    const obj = { val: 1 };
+    const decimals = (String(el.dataset.counter).split(".")[1] || "").length;
+    const obj = { val: decimals ? 0 : 1 };
     ScrollTrigger.create({
       trigger: el,
       start: "top 85%",
@@ -139,7 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
           val: end,
           duration: 2,
           ease: "power2.out",
-          onUpdate: () => { el.textContent = Math.floor(obj.val); },
+          onUpdate: () => {
+            el.textContent = decimals ? obj.val.toFixed(decimals) : String(Math.floor(obj.val));
+          },
         });
       },
     });
@@ -184,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const stage = document.querySelector(".services-stage");
   if (track && stage) {
     ScrollTrigger.matchMedia({
-      "(min-width: 1px)": function () {
+      "(min-width: 768px)": function () {
         const fromX = () => window.innerWidth;
         const toX = () => -(track.scrollWidth - window.innerWidth * 0.12);
         const tween = gsap.fromTo(track, {
@@ -203,6 +214,22 @@ document.addEventListener("DOMContentLoaded", () => {
           },
         });
         return () => tween.kill();
+      },
+      "(max-width: 767px)": function () {
+        gsap.set(track, { clearProps: "transform,x" });
+        const clones = [...track.children].map((card) => {
+          const clone = card.cloneNode(true);
+          clone.setAttribute("aria-hidden", "true");
+          clone.dataset.marqueeClone = "true";
+          track.appendChild(clone);
+          return clone;
+        });
+        stage.classList.add("is-marquee");
+        return () => {
+          stage.classList.remove("is-marquee");
+          clones.forEach((clone) => clone.remove());
+          gsap.set(track, { clearProps: "transform,x" });
+        };
       },
     });
   }
