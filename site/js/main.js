@@ -117,6 +117,39 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  document.querySelectorAll(".studio-tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const wrap = btn.closest(".studio-tabs");
+      if (!wrap) return;
+      wrap.querySelectorAll(".studio-tab").forEach((b) => b.classList.remove("is-active"));
+      wrap.querySelectorAll(".studio-tab-panel").forEach((p) => p.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      wrap.querySelector(btn.dataset.tab)?.classList.add("is-active");
+    });
+  });
+
+  if (document.querySelector(".history-swiper")) {
+    new Swiper(".history-swiper", {
+      slidesPerView: 1.15,
+      spaceBetween: 16,
+      loop: true,
+      speed: 750,
+      breakpoints: {
+        768: { slidesPerView: 1.7, spaceBetween: 20 },
+      },
+    });
+  }
+
+  document.querySelectorAll("[data-skill]").forEach((el) => {
+    const pct = Number(el.dataset.skill);
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 85%",
+      once: true,
+      onEnter: () => gsap.to(el, { width: pct + "%", duration: 1.6, ease: "power2.out" }),
+    });
+  });
+
   document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.tab;
@@ -128,9 +161,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.querySelectorAll(".acc-item").forEach((item) => {
-    item.querySelector(".acc-btn").addEventListener("click", () => {
+    const btn = item.querySelector(".acc-btn");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
       const open = item.classList.contains("is-open");
-      document.querySelectorAll(".acc-item").forEach((i) => i.classList.remove("is-open"));
+      const group = item.closest(".acc-list") || item.parentElement;
+      group.querySelectorAll(".acc-item").forEach((i) => i.classList.remove("is-open"));
       if (!open) item.classList.add("is-open");
     });
   });
