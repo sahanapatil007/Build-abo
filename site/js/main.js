@@ -128,6 +128,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  if (document.querySelector(".project-swiper")) {
+    new Swiper(".project-swiper", {
+      slidesPerView: 1,
+      spaceBetween: 16,
+      loop: true,
+      speed: 700,
+      grabCursor: true,
+      keyboard: { enabled: true },
+      navigation: {
+        nextEl: "[data-project-next]",
+        prevEl: "[data-project-prev]",
+      },
+      breakpoints: {
+        768: { slidesPerView: 1.15, spaceBetween: 20 },
+        1024: { slidesPerView: 2, spaceBetween: 28 },
+      },
+    });
+  }
+
   if (document.querySelector(".history-swiper")) {
     new Swiper(".history-swiper", {
       slidesPerView: 1.15,
@@ -270,58 +289,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const showcase = document.querySelector(".project-showcase");
-  if (showcase) {
-    const items = gsap.utils.toArray(".project-item");
-    const panels = items.map((item) => item.querySelector(".project-panel")).filter(Boolean);
-    gsap.matchMedia().add("(min-width: 1025px)", () => {
-      if (panels.length < 2) return;
-      const backgrounds = panels.map((panel) => panel.querySelector(".project-background"));
-      const contents = panels.map((panel) => panel.querySelector(".project-content"));
-      if (!backgrounds.every(Boolean) || !contents.every(Boolean)) return;
-
-      gsap.set(items, { position: "absolute", inset: 0 });
-      backgrounds.forEach((bg, index) => {
-        gsap.set(bg, { zIndex: index + 1, willChange: "clip-path" });
-      });
-      gsap.set(backgrounds, { clipPath: "inset(100% 0 0 0)" });
-      gsap.set(backgrounds[0], { clipPath: "inset(0% 0 0 0)" });
-      gsap.set(contents, { autoAlpha: 0, y: 0 });
-      gsap.set(contents[0], { autoAlpha: 1, y: 0 });
-
-      const scene = gsap.timeline({
-        scrollTrigger: {
-          trigger: showcase,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 0.9,
-          snap: {
-            snapTo: 1 / (panels.length - 1),
-            duration: { min: 0.35, max: 0.8 },
-            delay: 0.08,
-            ease: "power2.out",
-          },
-        },
-      });
-
-      panels.forEach((panel, index) => {
-        if (index === 0) return;
-        const at = index - 1;
-        scene
-          .to(backgrounds[index], { clipPath: "inset(0% 0 0 0)", duration: 1, ease: "none" }, at)
-          .to(contents[index - 1], { autoAlpha: 0, y: -14, duration: 0.12, ease: "none" }, at + 0.42)
-          .fromTo(contents[index], { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.12, ease: "none" }, at + 0.56);
-      });
-
-      ScrollTrigger.refresh();
-
-      return () => {
-        scene.kill();
-        gsap.set([items, backgrounds, contents], { clearProps: "all" });
-      };
-    });
-  }
-
   gsap.utils.toArray(".process-card").forEach((card, i) => {
     gsap.from(card, {
       x: 130,
@@ -341,6 +308,36 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!input.value) return;
       input.value = "";
       input.placeholder = "Thanks for subscribing";
+    });
+  }
+
+  const contactForm = document.querySelector(".contact-form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = new FormData(contactForm);
+      const name = String(data.get("name") || "").trim();
+      const phone = String(data.get("phone") || "").trim();
+      const email = String(data.get("email") || "").trim();
+      const interest = String(data.get("interest") || "").trim();
+      const budget = String(data.get("budget") || "").trim();
+      const message = String(data.get("message") || "").trim();
+      const body = [
+        `Name: ${name}`,
+        `Phone: ${phone}`,
+        `Email: ${email}`,
+        `Project type: ${interest}`,
+        `Budget range: ${budget}`,
+        "",
+        message,
+      ].join("\n");
+      window.location.href = `mailto:info@buildabo.in?subject=${encodeURIComponent(`Project enquiry from ${name}`)}&body=${encodeURIComponent(body)}`;
+      const status = contactForm.querySelector(".contact-form-status");
+      if (status) {
+        status.hidden = false;
+        status.textContent = "Opening your email app so we can receive the enquiry.";
+      }
+      contactForm.reset();
     });
   }
 
