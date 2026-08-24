@@ -2300,7 +2300,7 @@ body.menu-open { overflow: hidden; }
 
 .project-detail-main {
   display: grid;
-  grid-template-columns: minmax(0, 62vh) minmax(280px, 1fr);
+  grid-template-columns: minmax(0, 88vh) minmax(280px, 1fr);
   gap: 28px 56px;
   align-items: end;
   margin-bottom: 56px;
@@ -2324,7 +2324,7 @@ body.menu-open { overflow: hidden; }
 }
 .project-detail-frame img {
   display: block;
-  height: 62vh;
+  height: 72vh;
   width: auto;
   max-width: 100%;
   object-fit: contain;
@@ -2409,7 +2409,7 @@ body.menu-open { overflow: hidden; }
 @media (max-width: 1024px) {
   .portfolio-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
   .project-detail-main { grid-template-columns: 1fr; gap: 28px; align-items: start; }
-  .project-detail-frame img { height: 48vh; }
+  .project-detail-frame img { height: 54vh; }
   .project-detail-meta ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .project-detail-meta li:nth-child(3) { border-right: 0; }
   .project-detail-meta li:nth-child(n + 4) {
