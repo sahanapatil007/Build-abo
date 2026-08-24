@@ -70,22 +70,6 @@
       inPortfolio: true,
     },
     {
-      id: "soft-minimal-residence",
-      title: "Soft Minimal Residence",
-      category: "interior",
-      tags: "Interior, Apartment",
-      location: "Koramangala",
-      area: "2,100 sqft",
-      year: "2025",
-      about: [
-        "This Koramangala apartment asked for less furniture and more built-in calm. We redesigned the plan around storage, a long kitchen run, and a living room that can take both work and guests.",
-        "Colour stays close to plaster and timber. Details are quiet on purpose — shadow gaps, flush doors, and lighting that does not announce itself — so the rooms stay easy over time.",
-      ],
-      images: ["assets/about-hero-2.webp", "assets/hero-2.webp", "assets/about-portrait-tall.webp"],
-      featured: false,
-      inPortfolio: true,
-    },
-    {
       id: "vinay-residence",
       title: "Vinay Residence",
       category: "commercial",
@@ -240,7 +224,7 @@
     const summary = project.about[0] || "";
 
     document.title = project.title + " | buildabo — " + project.location + ", Bangalore";
-    setMeta('meta[name="description"]', summary, "content");
+    setMeta('meta[name="description"]', summary + " Home construction and interior designers in Bangalore by buildabo.", "content");
     setMeta('meta[property="og:title"]', project.title + " | buildabo", "content");
     setMeta('meta[property="og:description"]', summary, "content");
     setMeta('meta[property="og:image"]', HOST + project.images[0], "content");
@@ -287,6 +271,7 @@
         .map(function (src, index) {
           const suffix = index ? " — view " + (index + 1) : "";
           return (
+            '<figure class="project-detail-frame">' +
             '<img src="' +
             escapeHtml(src) +
             '" alt="' +
@@ -295,7 +280,8 @@
             escapeHtml(project.location) +
             " by buildabo" +
             suffix +
-            '" />'
+            '" />' +
+            "</figure>"
           );
         })
         .join("");
