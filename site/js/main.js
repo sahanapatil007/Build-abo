@@ -77,18 +77,21 @@ document.addEventListener("DOMContentLoaded", () => {
     pagination: { el: ".hero-pagination", type: "progressbar" },
   });
 
-  const teamSwiper = new Swiper(".team-swiper", {
-    slidesPerView: 1,
-    spaceBetween: 15,
-    speed: 750,
-    breakpoints: {
-      576: { slidesPerView: 2, spaceBetween: 15 },
-      768: { slidesPerView: 2, spaceBetween: 20 },
-      1025: { slidesPerView: 3, spaceBetween: 30 },
-    },
-  });
-  document.querySelectorAll("[data-team-prev]").forEach((el) => el.addEventListener("click", () => teamSwiper.slidePrev()));
-  document.querySelectorAll("[data-team-next]").forEach((el) => el.addEventListener("click", () => teamSwiper.slideNext()));
+  const teamEl = document.querySelector(".team-swiper");
+  if (teamEl) {
+    const teamSwiper = new Swiper(teamEl, {
+      slidesPerView: 1,
+      spaceBetween: 15,
+      speed: 750,
+      breakpoints: {
+        576: { slidesPerView: 2, spaceBetween: 15 },
+        768: { slidesPerView: 2, spaceBetween: 20 },
+        1025: { slidesPerView: 3, spaceBetween: 30 },
+      },
+    });
+    document.querySelectorAll("[data-team-prev]").forEach((el) => el.addEventListener("click", () => teamSwiper.slidePrev()));
+    document.querySelectorAll("[data-team-next]").forEach((el) => el.addEventListener("click", () => teamSwiper.slideNext()));
+  }
 
   const testimonialEl = document.querySelector(".testimonial-swiper");
   if (testimonialEl) {
@@ -311,33 +314,60 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const filters = document.querySelectorAll(".portfolio-filters [data-filter]");
+  if (filters.length) {
+    const items = document.querySelectorAll(".portfolio-grid [data-category]");
+    filters.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filter = btn.dataset.filter;
+        filters.forEach((b) => b.classList.toggle("is-active", b === btn));
+        items.forEach((item) => {
+          item.hidden = filter !== "all" && item.dataset.category !== filter;
+        });
+      });
+    });
+  }
+
   const contactForm = document.querySelector(".contact-form");
   if (contactForm) {
-    contactForm.addEventListener("submit", (e) => {
+    const status = contactForm.querySelector(".contact-form-status");
+    const submit = contactForm.querySelector(".contact-submit");
+
+    function setStatus(message, isError) {
+      if (!status) return;
+      status.hidden = false;
+      status.classList.toggle("is-error", Boolean(isError));
+      status.textContent = message;
+    }
+
+    contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const data = new FormData(contactForm);
       const name = String(data.get("name") || "").trim();
-      const phone = String(data.get("phone") || "").trim();
       const email = String(data.get("email") || "").trim();
-      const interest = String(data.get("interest") || "").trim();
-      const budget = String(data.get("budget") || "").trim();
-      const message = String(data.get("message") || "").trim();
-      const body = [
-        `Name: ${name}`,
-        `Phone: ${phone}`,
-        `Email: ${email}`,
-        `Project type: ${interest}`,
-        `Budget range: ${budget}`,
-        "",
-        message,
-      ].join("\n");
-      window.location.href = `mailto:info@buildabo.in?subject=${encodeURIComponent(`Project enquiry from ${name}`)}&body=${encodeURIComponent(body)}`;
-      const status = contactForm.querySelector(".contact-form-status");
-      if (status) {
-        status.hidden = false;
-        status.textContent = "Opening your email app so we can receive the enquiry.";
+      data.set("_subject", `Project enquiry from ${name || "the website"}`);
+      if (email) data.set("_replyto", email);
+
+      if (submit) submit.disabled = true;
+      setStatus("Sending your enquiry…", false);
+
+      try {
+        const response = await fetch("https://formsubmit.co/ajax/info@buildabo.in", {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: data,
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.success === "false" || result.success === false) {
+          throw new Error(result.message || "Could not send");
+        }
+        contactForm.reset();
+        setStatus("Thanks. Your enquiry has been sent to info@buildabo.in. We’ll reply within 24 hours.", false);
+      } catch (err) {
+        setStatus("We couldn’t send that just now. Email info@buildabo.in or call 9663635559.", true);
+      } finally {
+        if (submit) submit.disabled = false;
       }
-      contactForm.reset();
     });
   }
 
