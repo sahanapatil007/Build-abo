@@ -32,7 +32,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=pdf1" />
 </head>
 <body class="font-dm bg-white text-body">
   <div data-chrome="sticky"></div>
@@ -47,8 +47,8 @@
           <div class="swiper-wrapper">
             <div class="swiper-slide hero-slide-windows">
               <div class="hero-windows" aria-hidden="true">
-                <div class="hero-window hero-window--sm"><img src="assets/hero-1.webp" alt="Home construction in Bangalore by buildabo" /></div>
-                <div class="hero-window hero-window--lg"><img src="assets/hero-1.webp" alt="" /></div>
+                <div class="hero-window hero-window--sm"><img src="assets/hero-1.webp?v=pdf1" alt="Living room interior by buildabo in Bangalore" /></div>
+                <div class="hero-window hero-window--lg"><img src="assets/hero-1.webp?v=pdf1" alt="" /></div>
               </div>
               <div class="slide-copy sm:mt-4">
                 <h1>Interior Designers &amp; <br> Home Construction <br> in Bangalore</h1>
@@ -64,7 +64,7 @@
                   </div>
                 </div>
                 <div class="hero-split-media">
-                  <img src="assets/hero-2.webp" alt="Home interior designers in Bangalore — buildabo interiors" />
+                  <img src="assets/hero-2.webp?v=pdf1" alt="Home interior designers in Bangalore — buildabo interiors" />
                 </div>
                 <svg class="hero-split-mark" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true">
                   <path d="M-40 210 C 160 40, 280 300, 460 150 S 780 40, 980 210 S 1280 40, 1480 180" fill="none" stroke="currentColor" stroke-width="70" stroke-linecap="round"/>
@@ -73,8 +73,8 @@
             </div>
             <div class="swiper-slide hero-slide-forest">
               <div class="hero-windows hero-windows--forest" aria-hidden="true">
-                <div class="hero-window hero-window--sm"><img src="assets/hero-3.webp" alt="Interior designers in Bangalore — villa and home interiors by buildabo" /></div>
-                <div class="hero-window hero-window--lg"><img src="assets/hero-3.webp" alt="" /></div>
+                <div class="hero-window hero-window--sm"><img src="assets/hero-3.webp?v=pdf1" alt="Interior designers in Bangalore — villa and home interiors by buildabo" /></div>
+                <div class="hero-window hero-window--lg"><img src="assets/hero-3.webp?v=pdf1" alt="" /></div>
               </div>
               <div class="slide-copy sm:mt-4">
                 <p class="forest-kicker">Interior designers • Home construction • Bangalore</p>
@@ -102,7 +102,7 @@
         </div>
         <figure class="about-visual">
           <div class="reveal" data-dir="center" data-dur="3" data-delay="0.2">
-            <img src="assets/about-deco.png" alt="buildabo team on-site in Bangalore" />
+            <img src="assets/about-deco.png?v=pdf1" alt="Interior design by buildabo in Bangalore" />
           </div>
           
         </figure>
@@ -165,7 +165,7 @@
           </div>
           <div class="stats-photo">
             <div class="reveal h-full" data-dir="left" data-dur="1.2" data-delay="0.75">
-              <img src="assets/about-portrait.webp" alt="buildabo team on a house construction site in Bangalore" class="w-full h-full object-cover rounded-t-full"/>
+              <img src="assets/about-portrait.webp?v=pdf1" alt="Bedroom interior by buildabo in Bangalore" class="w-full h-full object-cover rounded-t-full"/>
             </div>
           </div>
         </div>
@@ -478,9 +478,49 @@
       </div>
     </section>
 
+    <section class="review-videos" id="customer-reviews" aria-label="Client video reviews">
+      <div class="swiper review-video-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <article class="review-video-card">
+              <div class="review-video-frame">
+                <img class="review-video-still" src="assets/projects/chandapura-01.jpg" alt="" />
+                <video playsinline preload="metadata" poster="assets/projects/chandapura-01.jpg">
+                  <source src="assets/reviews/priyanka-vasan.mp4" type="video/mp4" />
+                </video>
+                <button type="button" class="review-video-play" aria-label="Play client review"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></span></button>
+              </div>
+            </article>
+          </div>
+          <div class="swiper-slide">
+            <article class="review-video-card">
+              <div class="review-video-frame">
+                <img class="review-video-still" src="assets/nithin-residence.jpg" alt="" />
+                <video playsinline preload="metadata" poster="assets/nithin-residence.jpg">
+                  <source src="assets/reviews/keya-tung.mp4" type="video/mp4" />
+                </video>
+                <button type="button" class="review-video-play" aria-label="Play client review"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></span></button>
+              </div>
+            </article>
+          </div>
+          <div class="swiper-slide">
+            <article class="review-video-card">
+              <div class="review-video-frame">
+                <img class="review-video-still" src="assets/karthik-residence.jpg" alt="" />
+                <video playsinline preload="metadata" poster="assets/karthik-residence.jpg">
+                  <source src="assets/reviews/krishnegowda.mp4" type="video/mp4" />
+                </video>
+                <button type="button" class="review-video-play" aria-label="Play client review"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></span></button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="faqs" class="faq-section py-[150px] max-[1199px]:py-[100px] max-[767px]:py-[70px]">
-      <img class="faq-float" src="assets/faq-l.webp" alt="" />
-      <img class="faq-float right" src="assets/faq-r.webp" alt="" />
+      <img class="faq-float" src="assets/faq-l.webp?v=pdf1" alt="" />
+      <img class="faq-float right" src="assets/faq-r.webp?v=pdf1" alt="" />
       <div class="mx-auto w-[min(733px,calc(100%-72px))] relative z-[1]">
         <h2 class="text-center text-[40px] leading-[1.25] max-[1199px]:text-[32px] max-[767px]:text-[20px]">FAQs</h2>
         <div class="mt-10 js-fade acc-list">
@@ -512,7 +552,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script src="js/projects.js"></script>
+  <script src="js/projects.js?v=vinayres"></script>
   <script src="js/chrome.js"></script>
   <script src="js/main.js"></script>
   <script type="application/ld+json">

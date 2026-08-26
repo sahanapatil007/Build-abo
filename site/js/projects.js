@@ -65,20 +65,50 @@
       about: [
         "Designed for efficiency and style, this modular kitchen features premium cabinetry, quartz countertops, integrated appliances, and intelligent storage solutions. The layout was optimized to enhance workflow while maintaining a sleek and contemporary appearance suitable for everyday living.",
       ],
-      images: ["assets/priyanka-residence.jpg"],
+      images: ["assets/projects/chandapura-01.jpg"],
+      featured: true,
+      inPortfolio: true,
+    },
+    {
+      id: "kbr-residence",
+      title: "KBR 01 Render",
+      category: "interior",
+      tags: "Interior",
+      location: "Bengaluru",
+      area: "Bedroom interior",
+      year: "2026",
+      about: [
+        "A bedroom interior with custom wardrobe, window seat and a compact study. Light wood, soft colour and built-in storage, designed as one continuous wall of millwork.",
+      ],
+      images: ["assets/projects/kbr-01.jpg"],
+      featured: true,
+      inPortfolio: true,
+    },
+    {
+      id: "home-interiors",
+      title: "3D Renders",
+      category: "interior",
+      tags: "Interior",
+      location: "Bengaluru",
+      area: "Full-home interior",
+      year: "2026",
+      about: [
+        "A full-home interior across living, kitchen and bedrooms — custom joinery, lighting, and a mix of modern cabinetry with traditional details such as an indoor swing.",
+      ],
+      images: ["assets/projects/3d-01.jpg"],
       featured: true,
       inPortfolio: true,
     },
     {
       id: "vinay-residence",
       title: "Vinay Residence",
-      category: "commercial",
-      tags: "Commercial",
+      category: "residential",
+      tags: "Residential",
       location: "Kamakshipalya",
       area: "5,400 sq.ft",
       year: "2023",
       about: [
-        "This corporate office was designed to promote productivity, collaboration, and employee well-being. The workspace incorporates modern design principles, ergonomic layouts, premium finishes, and carefully planned lighting to create an inspiring professional environment.",
+        "A residence in Kamakshipalya, designed for daily living with considered layouts, finishes and lighting throughout the home.",
       ],
       images: ["assets/vinay-residence.jpg"],
       featured: true,
@@ -112,6 +142,13 @@
 
   function portfolioList() {
     return PROJECTS.filter((project) => project.inPortfolio);
+  }
+
+  function locationLine(project) {
+    const location = String(project.location || "").trim();
+    if (!location) return "Bengaluru";
+    if (/bengaluru|bangalore/i.test(location)) return location;
+    return location + ", Bengaluru";
   }
 
   function featuredList() {
@@ -223,7 +260,7 @@
     const pair = neighbors(list, project.id);
     const summary = project.about[0] || "";
 
-    document.title = project.title + " | buildabo — " + project.location + ", Bangalore";
+    document.title = project.title + " | buildabo — " + locationLine(project);
     setMeta('meta[name="description"]', summary + " Home construction and interior designers in Bangalore by buildabo.", "content");
     setMeta('meta[property="og:title"]', project.title + " | buildabo", "content");
     setMeta('meta[property="og:description"]', summary, "content");
@@ -250,19 +287,19 @@
     const meta = document.querySelector("[data-project-meta]");
     if (meta) {
       meta.innerHTML =
-        "<li><strong>Tags:</strong> " +
+        "<li><strong>Tags</strong><span>" +
         escapeHtml(project.tags) +
-        "</li>" +
-        "<li><strong>Company:</strong> buildabo</li>" +
-        "<li><strong>Location:</strong> " +
-        escapeHtml(project.location) +
-        ", Bengaluru</li>" +
-        "<li><strong>Total size:</strong> " +
+        "</span></li>" +
+        "<li><strong>Company</strong><span>buildabo</span></li>" +
+        "<li><strong>Location</strong><span>" +
+        escapeHtml(locationLine(project)) +
+        "</span></li>" +
+        "<li><strong>Total size</strong><span>" +
         escapeHtml(project.area) +
-        "</li>" +
-        "<li><strong>Year:</strong> " +
+        "</span></li>" +
+        "<li><strong>Year</strong><span>" +
         escapeHtml(project.year) +
-        "</li>";
+        "</span></li>";
     }
 
     const gallery = document.querySelector("[data-project-gallery]");

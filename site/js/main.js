@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const resumeScroll = () => {
+    if (document.body.classList.contains("lead-open") || document.body.classList.contains("menu-open")) return;
     lenis.start();
     lenis.resize();
   };
@@ -44,12 +45,14 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenu.classList.remove("is-open");
     mobileMenu.setAttribute("aria-hidden", "true");
     document.body.classList.remove("menu-open");
-    lenis.start();
+    if (!document.body.classList.contains("lead-open")) lenis.start();
   };
   menuBtns.forEach((btn) => btn.addEventListener("click", openMenu));
   closeBtns.forEach((btn) => btn.addEventListener("click", closeMenu));
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && mobileMenu.classList.contains("is-open")) closeMenu();
+    if (e.key !== "Escape") return;
+    if (document.querySelector(".lead-popup.is-open")) return;
+    if (mobileMenu && mobileMenu.classList.contains("is-open")) closeMenu();
   });
   mobileMenu.querySelectorAll(".mobile-nav-toggle").forEach((btn) => {
     btn.addEventListener("click", (e) => {
@@ -68,13 +71,81 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const heroSwiper = new Swiper(".hero-swiper", {
-    effect: "fade",
-    fadeEffect: { crossFade: true },
-    loop: true,
-    speed: 900,
-    autoplay: { delay: 5000, disableOnInteraction: false },
-    pagination: { el: ".hero-pagination", type: "progressbar" },
+  if (document.querySelector(".hero-swiper")) {
+    new Swiper(".hero-swiper", {
+      effect: "fade",
+      fadeEffect: { crossFade: true },
+      loop: true,
+      speed: 900,
+      autoplay: { delay: 5000, disableOnInteraction: false },
+      pagination: { el: ".hero-pagination", type: "progressbar" },
+    });
+  }
+
+  const reviewEl = document.querySelector(".review-video-swiper");
+  let reviewSwiper = null;
+  if (reviewEl) {
+    const wrapper = reviewEl.querySelector(".swiper-wrapper");
+    const originals = [...wrapper.querySelectorAll(".swiper-slide")];
+    for (let i = 0; i < 5; i += 1) {
+      originals.forEach((slide) => {
+        const clone = slide.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        wrapper.appendChild(clone);
+      });
+    }
+    reviewSwiper = new Swiper(reviewEl, {
+        slidesPerView: "auto",
+        spaceBetween: 28,
+        loop: true,
+      loopAdditionalSlides: 8,
+      speed: 7000,
+      grabCursor: true,
+      allowTouchMove: true,
+      watchOverflow: false,
+      autoplay: {
+        delay: 0,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: false,
+      },
+      freeMode: {
+        enabled: true,
+        momentum: false,
+      },
+    });
+    reviewSwiper.autoplay?.start();
+  }
+
+  document.querySelectorAll(".review-video-card").forEach((card) => {
+    const video = card.querySelector("video");
+    if (!video) return;
+    const toggle = () => {
+      if (video.paused) {
+        document.querySelectorAll(".review-video-card video").forEach((other) => {
+          if (other !== video) other.pause();
+        });
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    };
+    card.addEventListener("click", (e) => {
+      e.preventDefault();
+      toggle();
+    });
+    video.addEventListener("play", () => {
+      card.classList.add("is-playing");
+      reviewSwiper?.autoplay?.stop();
+    });
+    video.addEventListener("pause", () => {
+      card.classList.remove("is-playing");
+      const anyPlaying = [...document.querySelectorAll(".review-video-card video")].some((v) => !v.paused);
+      if (!anyPlaying) reviewSwiper?.autoplay?.start();
+    });
+    video.addEventListener("ended", () => {
+      card.classList.remove("is-playing");
+      reviewSwiper?.autoplay?.start();
+    });
   });
 
   const teamEl = document.querySelector(".team-swiper");
@@ -328,25 +399,69 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const contactForm = document.querySelector(".contact-form");
-  if (contactForm) {
-    const status = contactForm.querySelector(".contact-form-status");
-    const submit = contactForm.querySelector(".contact-submit");
+  const leadPopup = document.querySelector(".lead-popup");
+  const openLeadPopup = () => {
+    if (!leadPopup || sessionStorage.getItem("buildabo-lead-dismissed") === "1") return;
+    if (mobileMenu && mobileMenu.classList.contains("is-open")) closeMenu();
+    document.querySelectorAll(".review-video-card video").forEach((video) => video.pause());
+    leadPopup.classList.add("is-open");
+    leadPopup.setAttribute("aria-hidden", "false");
+    document.body.classList.add("lead-open");
+    lenis.stop();
+    window.setTimeout(() => leadPopup.querySelector("input, select, textarea")?.focus(), 50);
+  };
+  const closeLeadPopup = (dismiss) => {
+    if (!leadPopup) return;
+    leadPopup.classList.remove("is-open");
+    leadPopup.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("lead-open");
+    if (!document.body.classList.contains("menu-open")) lenis.start();
+    if (dismiss) sessionStorage.setItem("buildabo-lead-dismissed", "1");
+  };
+  if (leadPopup) {
+    leadPopup.querySelectorAll("[data-close-lead]").forEach((el) => {
+      el.addEventListener("click", () => closeLeadPopup(true));
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && leadPopup.classList.contains("is-open")) closeLeadPopup(true);
+    });
+    if (sessionStorage.getItem("buildabo-lead-dismissed") !== "1") {
+      window.setTimeout(openLeadPopup, 30000);
+    }
+  }
 
-    function setStatus(message, isError) {
+  document.querySelectorAll(".contact-form").forEach((form) => {
+    const status = form.querySelector(".contact-form-status");
+    const submit = form.querySelector(".contact-submit");
+    const isPopup = Boolean(form.closest(".lead-popup"));
+
+    function setStatus(message, isError, asHtml) {
       if (!status) return;
       status.hidden = false;
       status.classList.toggle("is-error", Boolean(isError));
-      status.textContent = message;
+      if (asHtml) status.innerHTML = message;
+      else status.textContent = message;
     }
 
-    contactForm.addEventListener("submit", async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const data = new FormData(contactForm);
+      const data = new FormData(form);
       const name = String(data.get("name") || "").trim();
       const email = String(data.get("email") || "").trim();
-      data.set("_subject", `Project enquiry from ${name || "the website"}`);
+      const phone = String(data.get("phone") || "").trim();
+      const prefix = isPopup
+        ? "Popup enquiry from"
+        : document.body.classList.contains("ad-page")
+          ? "Ad landing enquiry from"
+          : "Project enquiry from";
+      data.set("_subject", `${prefix} ${name || "the website"}`);
       if (email) data.set("_replyto", email);
+
+      const payload = {};
+      data.forEach((value, key) => {
+        if (key === "_honey" && !String(value).trim()) return;
+        payload[key] = String(value);
+      });
 
       if (submit) submit.disabled = true;
       setStatus("Sending your enquiry…", false);
@@ -354,22 +469,38 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const response = await fetch("https://formsubmit.co/ajax/info@buildabo.in", {
           method: "POST",
-          headers: { Accept: "application/json" },
-          body: data,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         });
         const result = await response.json().catch(() => ({}));
         if (!response.ok || result.success === "false" || result.success === false) {
           throw new Error(result.message || "Could not send");
         }
-        contactForm.reset();
+        form.reset();
         setStatus("Thanks. Your enquiry has been sent to info@buildabo.in. We’ll reply within 24 hours.", false);
+        if (isPopup) {
+          sessionStorage.setItem("buildabo-lead-dismissed", "1");
+          window.setTimeout(() => closeLeadPopup(true), 1400);
+        }
       } catch (err) {
-        setStatus("We couldn’t send that just now. Email info@buildabo.in or call 9663635559.", true);
+        const waText = encodeURIComponent(
+          `Hi buildabo, I'm ${name || "a website visitor"}. ${phone ? "Phone: " + phone + ". " : ""}${email ? "Email: " + email + ". " : ""}I'd like to talk about a project.`
+        );
+        setStatus(
+          'We couldn’t send that just now. Email <a href="mailto:info@buildabo.in">info@buildabo.in</a>, WhatsApp <a href="https://wa.me/919663635559?text=' +
+            waText +
+            '">9663635559</a>, or call <a href="tel:+919663635559">9663635559</a>.',
+          true,
+          true
+        );
       } finally {
         if (submit) submit.disabled = false;
       }
     });
-  }
+  });
 
   ScrollTrigger.addEventListener("refresh", () => lenis.resize());
   ScrollTrigger.refresh();
