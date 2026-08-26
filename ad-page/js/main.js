@@ -241,33 +241,34 @@ document.addEventListener("DOMContentLoaded", () => {
       const name = String(data.get("name") || "").trim();
       const email = String(data.get("email") || "").trim();
       const phone = String(data.get("phone") || "").trim();
-      data.set("_subject", `${isPopup ? "Popup enquiry from" : "Ad landing enquiry from"} ${name || "the website"}`);
-      if (email) data.set("_replyto", email);
-
-      const payload = {};
-      data.forEach((value, key) => {
-        if (key === "_honey" && !String(value).trim()) return;
-        payload[key] = String(value);
-      });
+      data.set("form-name", "enquiry");
+      data.set("subject", `${isPopup ? "Popup enquiry from" : "Ad landing enquiry from"} ${name || "the website"}`);
+      ["_subject", "_replyto", "_template", "_captcha", "_honey"].forEach((key) => data.delete(key));
 
       if (submit) submit.disabled = true;
       setStatus("Sending your enquiry…", false);
 
       try {
-        const response = await fetch("https://formsubmit.co/ajax/info@buildabo.in", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok || result.success === "false" || result.success === false) {
-          throw new Error(result.message || "Could not send");
+        const body = new URLSearchParams(data).toString();
+        const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+        let sent = false;
+
+        try {
+          const phpRes = await fetch("send-enquiry.php", { method: "POST", headers, body });
+          if (phpRes.ok) {
+            const result = await phpRes.json().catch(() => ({}));
+            sent = result.success !== false;
+          }
+        } catch (err) {}
+
+        if (!sent) {
+          const netlifyRes = await fetch("/", { method: "POST", headers, body });
+          sent = netlifyRes.ok;
         }
+
+        if (!sent) throw new Error("Could not send");
         form.reset();
-        setStatus("Thanks. Your enquiry has been sent to info@buildabo.in. We’ll reply within 24 hours.", false);
+        setStatus("Thanks. Your enquiry has been sent. We’ll reply within 24 hours.", false);
         if (isPopup) {
           sessionStorage.setItem("buildabo-lead-dismissed", "1");
           window.setTimeout(() => closeLeadPopup(true), 1400);
