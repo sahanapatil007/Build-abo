@@ -252,21 +252,46 @@ document.addEventListener("DOMContentLoaded", () => {
         const body = new URLSearchParams(data).toString();
         const headers = { "Content-Type": "application/x-www-form-urlencoded" };
         let sent = false;
+        let needsActivation = false;
 
         try {
           const phpRes = await fetch("send-enquiry.php", { method: "POST", headers, body });
           if (phpRes.ok) {
             const result = await phpRes.json().catch(() => ({}));
-            sent = result.success !== false;
+            sent = result.success === true;
           }
         } catch (err) {}
 
         if (!sent) {
-          const netlifyRes = await fetch("/", { method: "POST", headers, body });
-          sent = netlifyRes.ok;
+          try {
+            const netlifyRes = await fetch("/", { method: "POST", headers, body });
+            sent = netlifyRes.ok;
+          } catch (err) {}
         }
 
-        if (!sent) throw new Error("Could not send");
+        if (!sent) {
+          const fsRes = await fetch("https://formsubmit.co/ajax/info@buildabo.in", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({
+              name,
+              phone,
+              email,
+              "Project type": String(data.get("interest") || ""),
+              Budget: String(data.get("budget") || ""),
+              Location: String(data.get("location") || ""),
+              message: String(data.get("message") || ""),
+              _subject: String(data.get("subject") || `Project enquiry from ${name}`),
+              _template: "table",
+              _captcha: "false",
+            }),
+          });
+          const fsResult = await fsRes.json().catch(() => ({}));
+          if (fsResult.success === true || fsResult.success === "true") sent = true;
+          else needsActivation = /activ/i.test(String(fsResult.message || ""));
+        }
+
+        if (!sent) throw new Error(needsActivation ? "ACTIVATE" : "Could not send");
         form.reset();
         setStatus("Thanks. Your enquiry has been sent. We’ll reply within 24 hours.", false);
         if (isPopup) {
@@ -277,13 +302,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const waText = encodeURIComponent(
           `Hi buildabo, I'm ${name || "a website visitor"}. ${phone ? "Phone: " + phone + ". " : ""}${email ? "Email: " + email + ". " : ""}I'd like to talk about a project.`
         );
-        setStatus(
-          'We couldn’t send that just now. Email <a href="mailto:info@buildabo.in">info@buildabo.in</a>, WhatsApp <a href="https://wa.me/919663635559?text=' +
-            waText +
-            '">9663635559</a>, or call <a href="tel:+919663635559">9663635559</a>.',
-          true,
-          true
-        );
+        const fallback =
+          'Email <a href="mailto:info@buildabo.in">info@buildabo.in</a>, WhatsApp <a href="https://wa.me/919663635559?text=' +
+          waText +
+          '">9663635559</a>, or call <a href="tel:+919663635559">9663635559</a>.';
+        if (err && err.message === "ACTIVATE") {
+          setStatus(
+            "Open the inbox for <a href=\"mailto:info@buildabo.in\">info@buildabo.in</a> and click FormSubmit’s <strong>Activate Form</strong> link (check spam). Then submit this form again. Until then, " +
+              fallback,
+            true,
+            true
+          );
+        } else {
+          setStatus("We couldn’t send that just now. " + fallback, true, true);
+        }
       } finally {
         if (submit) submit.disabled = false;
       }
