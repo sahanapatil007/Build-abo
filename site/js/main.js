@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const isIg = el.classList.contains("ig-reel-swiper");
     const swiper = new Swiper(el, {
-      slidesPerView: 2,
+      slidesPerView: 1,
       spaceBetween: isIg ? 28 : 16,
       loop: true,
       loopAdditionalSlides: 8,
@@ -124,8 +124,8 @@ document.addEventListener("DOMContentLoaded", () => {
         momentum: false,
       },
       breakpoints: {
-        768: { spaceBetween: isIg ? 40 : 24 },
-        1025: { spaceBetween: isIg ? 56 : 40 },
+        768: { slidesPerView: 2, spaceBetween: isIg ? 40 : 24 },
+        1025: { slidesPerView: 2, spaceBetween: isIg ? 56 : 40 },
       },
     });
     swiper.autoplay?.start();
