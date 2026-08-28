@@ -3460,9 +3460,19 @@ body.lead-open { overflow: hidden; }
   background: #e00000;
 }
 .review-video-play svg { width: 16px; height: 16px; margin-left: 2px; }
-.review-video-card.is-playing .review-video-play {
+.review-video-card.is-playing:not(.is-loading) .review-video-play {
   opacity: 0;
   pointer-events: none;
+}
+.review-video-card.is-loading .review-video-play {
+  opacity: 1;
+  pointer-events: none;
+}
+.review-video-card.is-loading .yt-play span {
+  animation: yt-wait .7s ease infinite;
+}
+@keyframes yt-wait {
+  50% { transform: scale(.9); opacity: .65; }
 }
 .clients-section .review-video-swiper,
 .ad-quotes .review-video-swiper {

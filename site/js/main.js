@@ -83,11 +83,44 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const reviewSwipers = [];
+  const ytWarmup = document.createElement("div");
+  ytWarmup.id = "yt-warmup";
+  ytWarmup.hidden = true;
+  ytWarmup.setAttribute("aria-hidden", "true");
+  document.body.appendChild(ytWarmup);
+  const ytPlayers = new Map();
+  const ytEmbed = (id) =>
+    `https://www.youtube.com/embed/${id}?enablejsapi=1&rel=0&modestbranding=1&playsinline=1&autoplay=0&origin=${encodeURIComponent(window.location.origin)}`;
+  const ytCommand = (iframe, func) => {
+    iframe.contentWindow?.postMessage(JSON.stringify({ event: "command", func, args: [] }), "*");
+  };
+  const getYtIframe = (id) => {
+    if (ytPlayers.has(id)) return ytPlayers.get(id);
+    const iframe = document.createElement("iframe");
+    iframe.src = ytEmbed(id);
+    iframe.title = "YouTube review";
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+    iframe.dataset.ytReady = "0";
+    iframe.addEventListener("load", () => {
+      iframe.dataset.ytReady = "1";
+    }, { once: true });
+    ytWarmup.appendChild(iframe);
+    ytPlayers.set(id, iframe);
+    return iframe;
+  };
+  [...new Set(
+    [...document.querySelectorAll(".review-video-card[data-yt]")].map((card) => card.dataset.yt).filter(Boolean)
+  )].forEach((id) => getYtIframe(id));
   const stopReviewVideos = () => {
     document.querySelectorAll(".review-video-card video").forEach((video) => video.pause());
     document.querySelectorAll(".review-video-card[data-yt]").forEach((card) => {
-      card.querySelector("iframe")?.remove();
-      card.classList.remove("is-playing");
+      card.classList.remove("is-playing", "is-loading");
+    });
+    ytPlayers.forEach((iframe) => {
+      ytCommand(iframe, "pauseVideo");
+      ytWarmup.appendChild(iframe);
     });
   };
   const anyReviewPlaying = () =>
@@ -145,14 +178,22 @@ document.addEventListener("DOMContentLoaded", () => {
         stopReviewVideos();
         const frame = card.querySelector(".review-video-frame");
         if (!frame) return;
-        const iframe = document.createElement("iframe");
-        iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+        const iframe = getYtIframe(ytId);
         iframe.title = card.querySelector(".review-video-who")?.textContent?.trim() || "YouTube review";
-        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-        iframe.setAttribute("allowfullscreen", "");
-        iframe.referrerPolicy = "strict-origin-when-cross-origin";
         frame.appendChild(iframe);
         card.classList.add("is-playing");
+        const playNow = () => {
+          ytCommand(iframe, "playVideo");
+          card.classList.remove("is-loading");
+        };
+        if (iframe.dataset.ytReady === "1") {
+          playNow();
+        } else {
+          card.classList.add("is-loading");
+          iframe.addEventListener("load", playNow, { once: true });
+        }
+        window.setTimeout(playNow, 200);
+        window.setTimeout(playNow, 700);
         pauseReviewCarousels();
       });
       return;
