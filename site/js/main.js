@@ -82,10 +82,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const reviewEl = document.querySelector(".review-video-swiper");
-  let reviewSwiper = null;
-  if (reviewEl) {
-    const wrapper = reviewEl.querySelector(".swiper-wrapper");
+  const reviewSwipers = [];
+  const stopReviewVideos = () => {
+    document.querySelectorAll(".review-video-card video").forEach((video) => video.pause());
+    document.querySelectorAll(".review-video-card[data-yt]").forEach((card) => {
+      card.querySelector("iframe")?.remove();
+      card.classList.remove("is-playing");
+    });
+  };
+  const anyReviewPlaying = () =>
+    [...document.querySelectorAll(".review-video-card video")].some((v) => !v.paused) ||
+    !!document.querySelector(".review-video-card.is-playing iframe");
+  document.querySelectorAll(".review-video-swiper, .ig-reel-swiper").forEach((el) => {
+    const wrapper = el.querySelector(".swiper-wrapper");
+    if (!wrapper) return;
     const originals = [...wrapper.querySelectorAll(".swiper-slide")];
     for (let i = 0; i < 5; i += 1) {
       originals.forEach((slide) => {
@@ -94,12 +104,13 @@ document.addEventListener("DOMContentLoaded", () => {
         wrapper.appendChild(clone);
       });
     }
-    reviewSwiper = new Swiper(reviewEl, {
-        slidesPerView: "auto",
-        spaceBetween: 28,
-        loop: true,
+    const isIg = el.classList.contains("ig-reel-swiper");
+    const swiper = new Swiper(el, {
+      slidesPerView: 2,
+      spaceBetween: isIg ? 28 : 16,
+      loop: true,
       loopAdditionalSlides: 8,
-      speed: 7000,
+      speed: isIg ? 6500 : 7000,
       grabCursor: true,
       allowTouchMove: true,
       watchOverflow: false,
@@ -112,18 +123,45 @@ document.addEventListener("DOMContentLoaded", () => {
         enabled: true,
         momentum: false,
       },
+      breakpoints: {
+        768: { spaceBetween: isIg ? 40 : 24 },
+        1025: { spaceBetween: isIg ? 56 : 40 },
+      },
     });
-    reviewSwiper.autoplay?.start();
-  }
+    swiper.autoplay?.start();
+    reviewSwipers.push(swiper);
+  });
+  const pauseReviewCarousels = () => reviewSwipers.forEach((s) => s.autoplay?.stop());
+  const resumeReviewCarousels = () => {
+    if (!anyReviewPlaying()) reviewSwipers.forEach((s) => s.autoplay?.start());
+  };
 
   document.querySelectorAll(".review-video-card").forEach((card) => {
+    const ytId = card.dataset.yt;
+    if (ytId) {
+      card.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (card.classList.contains("is-playing") && card.querySelector("iframe")) return;
+        stopReviewVideos();
+        const frame = card.querySelector(".review-video-frame");
+        if (!frame) return;
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+        iframe.title = card.querySelector(".review-video-who")?.textContent?.trim() || "YouTube review";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.setAttribute("allowfullscreen", "");
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        frame.appendChild(iframe);
+        card.classList.add("is-playing");
+        pauseReviewCarousels();
+      });
+      return;
+    }
     const video = card.querySelector("video");
     if (!video) return;
     const toggle = () => {
       if (video.paused) {
-        document.querySelectorAll(".review-video-card video").forEach((other) => {
-          if (other !== video) other.pause();
-        });
+        stopReviewVideos();
         video.play().catch(() => {});
       } else {
         video.pause();
@@ -135,16 +173,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     video.addEventListener("play", () => {
       card.classList.add("is-playing");
-      reviewSwiper?.autoplay?.stop();
+      pauseReviewCarousels();
     });
     video.addEventListener("pause", () => {
       card.classList.remove("is-playing");
-      const anyPlaying = [...document.querySelectorAll(".review-video-card video")].some((v) => !v.paused);
-      if (!anyPlaying) reviewSwiper?.autoplay?.start();
+      resumeReviewCarousels();
     });
     video.addEventListener("ended", () => {
       card.classList.remove("is-playing");
-      reviewSwiper?.autoplay?.start();
+      resumeReviewCarousels();
     });
   });
 
@@ -403,7 +440,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const openLeadPopup = () => {
     if (!leadPopup || sessionStorage.getItem("buildabo-lead-dismissed") === "1") return;
     if (mobileMenu && mobileMenu.classList.contains("is-open")) closeMenu();
-    document.querySelectorAll(".review-video-card video").forEach((video) => video.pause());
+    stopReviewVideos();
     leadPopup.classList.add("is-open");
     leadPopup.setAttribute("aria-hidden", "false");
     document.body.classList.add("lead-open");
