@@ -1,33 +1,19 @@
 (function () {
+  const SITE = "https://tiny-cucurucho-17c5bd.netlify.app/";
   const MAP =
     "https://www.google.com/maps/search/?api=1&query=3rd+Floor+244+Kallumantapa+Horamavu+Bengaluru+560113";
   const MENU_ICON =
     '<svg width="23" height="13" viewBox="0 0 23 13" fill="none"><path d="M4.16 0H17.76V1H4.16V0Z" fill="black"/><path d="M0 6H22.13V7H0V6Z" fill="black"/><path d="M4.16 12H17.76V13H4.16V12Z" fill="black"/></svg>';
 
-  function pageFile() {
-    const file = (window.location.pathname.replace(/\\/g, "/").split("/").pop() || "").toLowerCase();
-    return file && file !== "/" ? file : "index.html";
-  }
-
-  function isCurrent(href) {
-    const file = pageFile();
-    const target = href.split("#")[0].split("?")[0];
-    if (target === "index.html") return file === "index.html";
-    if (target === "portfolio.html") return file === "portfolio.html" || file === "project.html";
-    return file === target;
-  }
-
-  function currentAttr(href) {
-    return isCurrent(href) ? ' aria-current="page"' : "";
-  }
-
-  function ctaHref() {
-    return pageFile() === "contact.html" ? "#get-in-touch" : "contact.html";
+  function page(file) {
+    return SITE + file;
   }
 
   function logo() {
     return (
-      '<a href="index.html" class="logo" aria-label="buildabo — interior designers and home construction in Bangalore">' +
+      '<a href="' +
+      SITE +
+      '" class="logo" aria-label="buildabo — interior designers and home construction in Bangalore">' +
       '<img class="logo-mark" src="assets/logo-mark.png" alt="" />' +
       '<img class="logo-word" src="assets/buildabo.svg" alt="buildabo" />' +
       "</a>"
@@ -36,31 +22,29 @@
 
   function startBtn(extraClass) {
     return (
-      '<a href="' +
-      ctaHref() +
-      '" class="btn ' +
+      '<a href="#enquiry" class="btn ' +
       extraClass +
-      '"><span>Start a Project</span></a>'
+      '"><span class="dot"></span><span>Start a Project</span><span class="dot"></span></a>'
     );
   }
 
   function desktopNav() {
     return (
-      '<a href="index.html"' +
-      currentAttr("index.html") +
-      ">Home</a>" +
-      '<a href="about.html"' +
-      currentAttr("about.html") +
-      ">About</a>" +
-      '<a href="services.html"' +
-      currentAttr("services.html") +
-      ">Service</a>" +
-      '<a href="portfolio.html"' +
-      currentAttr("portfolio.html") +
-      ">Portfolio</a>" +
-      '<a href="contact.html"' +
-      currentAttr("contact.html") +
-      ">Contact us</a>"
+      '<a href="' +
+      page("index.html") +
+      '">Home</a>' +
+      '<a href="' +
+      page("about.html") +
+      '">About</a>' +
+      '<a href="' +
+      page("services.html") +
+      '">Service</a>' +
+      '<a href="' +
+      page("portfolio.html") +
+      '">Portfolio</a>' +
+      '<a href="' +
+      page("contact.html") +
+      '">Contact us</a>'
     );
   }
 
@@ -86,21 +70,21 @@
       '<nav class="mobile-menu-panel" aria-label="Menu">' +
       '<div class="mobile-menu-heading"><h2>Menu</h2></div>' +
       '<ul class="mobile-nav">' +
-      "<li><a href=\"index.html\"" +
-      currentAttr("index.html") +
-      ">Home</a></li>" +
-      "<li><a href=\"about.html\"" +
-      currentAttr("about.html") +
-      ">About</a></li>" +
-      "<li><a href=\"services.html\"" +
-      currentAttr("services.html") +
-      ">Service</a></li>" +
-      "<li><a href=\"portfolio.html\"" +
-      currentAttr("portfolio.html") +
-      ">Portfolio</a></li>" +
-      "<li><a href=\"contact.html\"" +
-      currentAttr("contact.html") +
-      ">Contact us</a></li>" +
+      "<li><a href=\"" +
+      page("index.html") +
+      '">Home</a></li>' +
+      "<li><a href=\"" +
+      page("about.html") +
+      '">About</a></li>' +
+      "<li><a href=\"" +
+      page("services.html") +
+      '">Service</a></li>' +
+      "<li><a href=\"" +
+      page("portfolio.html") +
+      '">Portfolio</a></li>' +
+      "<li><a href=\"" +
+      page("contact.html") +
+      '">Contact us</a></li>' +
       "</ul></nav></div>"
     );
   }
@@ -139,21 +123,21 @@
       startBtn("btn-white") +
       "</div>" +
       "<div><h6>NAVIGATION</h6><ul class=\"foot-list\">" +
-      "<li><a href=\"index.html\"" +
-      currentAttr("index.html") +
-      ">Home</a></li>" +
-      "<li><a href=\"about.html\"" +
-      currentAttr("about.html") +
-      ">About</a></li>" +
-      "<li><a href=\"services.html\"" +
-      currentAttr("services.html") +
-      ">Services</a></li>" +
-      "<li><a href=\"portfolio.html\"" +
-      currentAttr("portfolio.html") +
-      ">Projects</a></li>" +
-      "<li><a href=\"contact.html\"" +
-      currentAttr("contact.html") +
-      ">Contact</a></li>" +
+      "<li><a href=\"" +
+      page("index.html") +
+      '">Home</a></li>' +
+      "<li><a href=\"" +
+      page("about.html") +
+      '">About</a></li>' +
+      "<li><a href=\"" +
+      page("services.html") +
+      '">Services</a></li>' +
+      "<li><a href=\"" +
+      page("portfolio.html") +
+      '">Projects</a></li>' +
+      "<li><a href=\"" +
+      page("contact.html") +
+      '">Contact</a></li>' +
       "</ul></div>" +
       "<div><h6>CONTACT</h6>" +
       '<p class="mb-1">Company Address</p>' +
@@ -172,9 +156,9 @@
       '<a href="https://www.instagram.com/buildabo/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM17.5 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></a>' +
       '<a href="#" aria-label="Facebook"><svg viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg></a>' +
       "</div>" +
-      '<p><a href="privacy.html"' +
-      currentAttr("privacy.html") +
-      ">Privacy Policy</a></p>" +
+      '<p><a href="' +
+      page("privacy.html") +
+      '">Privacy Policy</a></p>' +
       "</div></div></footer>"
     );
   }
@@ -259,9 +243,7 @@
 
   function injectWidgets() {
     if (document.querySelector(".whatsapp-fab")) return;
-    let html = whatsappHTML();
-    if (!/^(contact\.html|privacy\.html)$/.test(pageFile())) html += popupHTML();
-    document.body.insertAdjacentHTML("beforeend", html);
+    document.body.insertAdjacentHTML("beforeend", whatsappHTML() + popupHTML());
   }
 
   if (document.readyState === "loading") {

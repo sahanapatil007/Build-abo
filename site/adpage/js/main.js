@@ -36,12 +36,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeBtns = document.querySelectorAll("[data-close-menu]");
   const mobileMenu = document.querySelector(".mobile-menu");
   const openMenu = () => {
+    if (!mobileMenu) return;
     mobileMenu.classList.add("is-open");
     mobileMenu.setAttribute("aria-hidden", "false");
     document.body.classList.add("menu-open");
     lenis.stop();
   };
   const closeMenu = () => {
+    if (!mobileMenu) return;
     mobileMenu.classList.remove("is-open");
     mobileMenu.setAttribute("aria-hidden", "true");
     document.body.classList.remove("menu-open");
@@ -54,31 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.querySelector(".lead-popup.is-open")) return;
     if (mobileMenu && mobileMenu.classList.contains("is-open")) closeMenu();
   });
-  mobileMenu.querySelectorAll(".mobile-nav-toggle").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const item = btn.closest(".has-children");
-      if (!item) return;
-      const open = !item.classList.contains("is-open");
-      item.classList.toggle("is-open", open);
-      btn.setAttribute("aria-expanded", String(open));
-    });
-  });
-  mobileMenu.querySelectorAll("a").forEach((a) => {
-    a.addEventListener("click", () => {
-      if (a.getAttribute("href") && a.getAttribute("href") !== "#") closeMenu();
-    });
-  });
-
-  if (document.querySelector(".hero-swiper")) {
-    new Swiper(".hero-swiper", {
-      effect: "fade",
-      fadeEffect: { crossFade: true },
-      loop: true,
-      speed: 900,
-      autoplay: { delay: 5000, disableOnInteraction: false },
-      pagination: { el: ".hero-pagination", type: "progressbar" },
+  if (mobileMenu) {
+    mobileMenu.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => {
+        if (a.getAttribute("href") && a.getAttribute("href") !== "#") closeMenu();
+      });
     });
   }
 
@@ -226,22 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const teamEl = document.querySelector(".team-swiper");
-  if (teamEl) {
-    const teamSwiper = new Swiper(teamEl, {
-      slidesPerView: 1,
-      spaceBetween: 15,
-      speed: 750,
-      breakpoints: {
-        576: { slidesPerView: 2, spaceBetween: 15 },
-        768: { slidesPerView: 2, spaceBetween: 20 },
-        1025: { slidesPerView: 3, spaceBetween: 30 },
-      },
-    });
-    document.querySelectorAll("[data-team-prev]").forEach((el) => el.addEventListener("click", () => teamSwiper.slidePrev()));
-    document.querySelectorAll("[data-team-next]").forEach((el) => el.addEventListener("click", () => teamSwiper.slideNext()));
-  }
-
   const testimonialEl = document.querySelector(".testimonial-swiper");
   if (testimonialEl) {
     const originals = [...testimonialEl.querySelectorAll(".swiper-slide")];
@@ -268,79 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     });
   }
-
-  document.querySelectorAll(".studio-tab").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const wrap = btn.closest(".studio-tabs");
-      if (!wrap) return;
-      wrap.querySelectorAll(".studio-tab").forEach((b) => b.classList.remove("is-active"));
-      wrap.querySelectorAll(".studio-tab-panel").forEach((p) => p.classList.remove("is-active"));
-      btn.classList.add("is-active");
-      wrap.querySelector(btn.dataset.tab)?.classList.add("is-active");
-    });
-  });
-
-  if (document.querySelector(".project-swiper")) {
-    new Swiper(".project-swiper", {
-      slidesPerView: 1,
-      spaceBetween: 16,
-      loop: true,
-      speed: 700,
-      grabCursor: true,
-      keyboard: { enabled: true },
-      navigation: {
-        nextEl: "[data-project-next]",
-        prevEl: "[data-project-prev]",
-      },
-      breakpoints: {
-        768: { slidesPerView: 1.15, spaceBetween: 20 },
-        1024: { slidesPerView: 2, spaceBetween: 28 },
-      },
-    });
-  }
-
-  if (document.querySelector(".history-swiper")) {
-    new Swiper(".history-swiper", {
-      slidesPerView: 1.15,
-      spaceBetween: 16,
-      loop: true,
-      speed: 750,
-      breakpoints: {
-        768: { slidesPerView: 1.7, spaceBetween: 20 },
-      },
-    });
-  }
-
-  document.querySelectorAll("[data-skill]").forEach((el) => {
-    const pct = Number(el.dataset.skill);
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 85%",
-      once: true,
-      onEnter: () => gsap.to(el, { width: pct + "%", duration: 1.6, ease: "power2.out" }),
-    });
-  });
-
-  document.querySelectorAll(".tab-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.tab;
-      document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("is-active"));
-      document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("is-active"));
-      btn.classList.add("is-active");
-      document.querySelector(id)?.classList.add("is-active");
-    });
-  });
-
-  document.querySelectorAll(".acc-item").forEach((item) => {
-    const btn = item.querySelector(".acc-btn");
-    if (!btn) return;
-    btn.addEventListener("click", () => {
-      const open = item.classList.contains("is-open");
-      const group = item.closest(".acc-list") || item.parentElement;
-      group.querySelectorAll(".acc-item").forEach((i) => i.classList.remove("is-open"));
-      if (!open) item.classList.add("is-open");
-    });
-  });
 
   document.querySelectorAll("[data-counter]").forEach((el) => {
     const end = Number(el.dataset.counter);
@@ -375,107 +268,6 @@ document.addEventListener("DOMContentLoaded", () => {
       scrollTrigger: { trigger: el, start: "top 88%" },
     });
   });
-
-  gsap.utils.toArray(".reveal").forEach((wrap) => {
-    const img = wrap.querySelector("img");
-    if (!img) return;
-    const dir = wrap.dataset.dir || "top";
-    const clipFrom =
-      dir === "left" ? "inset(0 100% 0 0)" :
-      dir === "center" ? "inset(20% 20% 20% 20%)" :
-      "inset(100% 0 0 0)";
-    gsap.fromTo(
-      img,
-      { clipPath: clipFrom, scale: 1.12 },
-      {
-        clipPath: "inset(0% 0% 0% 0%)",
-        scale: 1,
-        duration: Number(wrap.dataset.dur || 1.2),
-        delay: Number(wrap.dataset.delay || 0),
-        ease: "power3.out",
-        scrollTrigger: { trigger: wrap, start: "top 85%" },
-      }
-    );
-  });
-
-  const track = document.querySelector(".service-track");
-  const stage = document.querySelector(".services-stage");
-  if (track && stage) {
-    ScrollTrigger.matchMedia({
-      "(min-width: 768px)": function () {
-        const fromX = () => window.innerWidth;
-        const toX = () => -(track.scrollWidth - window.innerWidth * 0.12);
-        const tween = gsap.fromTo(track, {
-          x: fromX,
-        }, {
-          x: toX,
-          ease: "none",
-          scrollTrigger: {
-            trigger: stage,
-            start: "top top",
-            end: () => "+=" + Math.max(track.scrollWidth + window.innerWidth, window.innerHeight * 2),
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-        return () => tween.kill();
-      },
-      "(max-width: 767px)": function () {
-        gsap.set(track, { clearProps: "transform,x" });
-        const clones = [...track.children].map((card) => {
-          const clone = card.cloneNode(true);
-          clone.setAttribute("aria-hidden", "true");
-          clone.dataset.marqueeClone = "true";
-          track.appendChild(clone);
-          return clone;
-        });
-        stage.classList.add("is-marquee");
-        return () => {
-          stage.classList.remove("is-marquee");
-          clones.forEach((clone) => clone.remove());
-          gsap.set(track, { clearProps: "transform,x" });
-        };
-      },
-    });
-  }
-
-  gsap.utils.toArray(".process-card").forEach((card, i) => {
-    gsap.from(card, {
-      x: 130,
-      opacity: 0,
-      duration: 1,
-      delay: 0.75 - i * 0.2,
-      ease: "power3.out",
-      scrollTrigger: { trigger: ".process-cards", start: "top 80%" },
-    });
-  });
-
-  const newsForm = document.querySelector(".news-form");
-  if (newsForm) {
-    newsForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const input = newsForm.querySelector("input");
-      if (!input.value) return;
-      input.value = "";
-      input.placeholder = "Thanks for subscribing";
-    });
-  }
-
-  const filters = document.querySelectorAll(".portfolio-filters [data-filter]");
-  if (filters.length) {
-    const items = document.querySelectorAll(".portfolio-grid [data-category]");
-    filters.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const filter = btn.dataset.filter;
-        filters.forEach((b) => b.classList.toggle("is-active", b === btn));
-        items.forEach((item) => {
-          item.hidden = filter !== "all" && item.dataset.category !== filter;
-        });
-      });
-    });
-  }
 
   const leadPopup = document.querySelector(".lead-popup");
   const openLeadPopup = () => {
@@ -527,61 +319,28 @@ document.addEventListener("DOMContentLoaded", () => {
       const name = String(data.get("name") || "").trim();
       const email = String(data.get("email") || "").trim();
       const phone = String(data.get("phone") || "").trim();
-      const prefix = isPopup
-        ? "Popup enquiry from"
-        : document.body.classList.contains("ad-page")
-          ? "Ad landing enquiry from"
-          : "Project enquiry from";
       data.set("form-name", "enquiry");
-      data.set("subject", `${prefix} ${name || "the website"}`);
+      data.set("subject", `${isPopup ? "Popup enquiry from" : "Ad landing enquiry from"} ${name || "the website"}`);
       ["_subject", "_replyto", "_template", "_captcha", "_honey"].forEach((key) => data.delete(key));
 
       if (submit) submit.disabled = true;
       setStatus("Sending your enquiry…", false);
 
-      const isLocalPreview = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
-
       try {
         const body = new URLSearchParams(data).toString();
         const headers = { "Content-Type": "application/x-www-form-urlencoded" };
         let sent = false;
-        const parseJsonish = async (res) => {
-          const text = await res.text();
-          const type = (res.headers.get("content-type") || "").toLowerCase();
-          if (type.includes("json")) {
-            try {
-              return JSON.parse(text);
-            } catch (err) {}
-          }
-          const start = text.indexOf("{");
-          const end = text.lastIndexOf("}");
-          if (start >= 0 && end > start) {
-            try {
-              return JSON.parse(text.slice(start, end + 1));
-            } catch (err) {}
-          }
-          return {};
-        };
-        const isSentFlag = (value, message) => {
-          if (value === true || value === 1) return true;
-          const flag = String(value || "").trim().toLowerCase();
-          if (flag === "true" || flag === "1" || flag === "ok" || flag === "success") return true;
-          const msg = String(message || "").toLowerCase();
-          return /sent|thank you|successfully/.test(msg) && !/not sent|could not|fail|activat/.test(msg);
-        };
+        let needsActivation = false;
 
-        if (!isLocalPreview) {
-          try {
-            const phpRes = await fetch("send-enquiry.php", { method: "POST", headers, body });
-            const type = (phpRes.headers.get("content-type") || "").toLowerCase();
-            if (phpRes.ok && type.includes("json")) {
-              const result = await parseJsonish(phpRes);
-              sent = isSentFlag(result.success, result.message);
-            }
-          } catch (err) {}
-        }
+        try {
+          const phpRes = await fetch("send-enquiry.php", { method: "POST", headers, body });
+          if (phpRes.ok) {
+            const result = await phpRes.json().catch(() => ({}));
+            sent = result.success === true;
+          }
+        } catch (err) {}
 
-        if (!sent && /netlify/i.test(window.location.hostname)) {
+        if (!sent) {
           try {
             const netlifyRes = await fetch("/", { method: "POST", headers, body });
             sent = netlifyRes.ok;
@@ -589,35 +348,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (!sent) {
-          try {
-            const fsRes = await fetch("https://formsubmit.co/ajax/info@buildabo.in", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", Accept: "application/json" },
-              body: JSON.stringify({
-                name,
-                phone,
-                email,
-                "Project type": String(data.get("interest") || ""),
-                Budget: String(data.get("budget") || ""),
-                Location: String(data.get("location") || ""),
-                message: String(data.get("message") || ""),
-                _subject: String(data.get("subject") || `Project enquiry from ${name}`),
-                _template: "table",
-                _captcha: "false",
-              }),
-            });
-            const fsResult = await parseJsonish(fsRes);
-            sent = isSentFlag(fsResult.success, fsResult.message);
-          } catch (err) {}
+          const fsRes = await fetch("https://formsubmit.co/ajax/info@buildabo.in", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({
+              name,
+              phone,
+              email,
+              "Project type": String(data.get("interest") || ""),
+              Budget: String(data.get("budget") || ""),
+              Location: String(data.get("location") || ""),
+              message: String(data.get("message") || ""),
+              _subject: String(data.get("subject") || `Project enquiry from ${name}`),
+              _template: "table",
+              _captcha: "false",
+            }),
+          });
+          const fsResult = await fsRes.json().catch(() => ({}));
+          if (fsResult.success === true || fsResult.success === "true") sent = true;
+          else needsActivation = /activ/i.test(String(fsResult.message || ""));
         }
 
-        if (!sent) {
-          if (isLocalPreview) {
-            setStatus("This local preview cannot send email. On the live website, this form emails info@buildabo.in.", false);
-            return;
-          }
-          throw new Error("Could not send");
-        }
+        if (!sent) throw new Error(needsActivation ? "ACTIVATE" : "Could not send");
         form.reset();
         setStatus("Thanks. Your enquiry has been sent. We’ll reply within 24 hours.", false);
         if (isPopup) {
@@ -628,13 +380,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const waText = encodeURIComponent(
           `Hi buildabo, I'm ${name || "a website visitor"}. ${phone ? "Phone: " + phone + ". " : ""}${email ? "Email: " + email + ". " : ""}I'd like to talk about a project.`
         );
-        setStatus(
-          "We couldn’t confirm the email just now, but you can still reach us: Email <a href=\"mailto:info@buildabo.in\">info@buildabo.in</a>, WhatsApp <a href=\"https://wa.me/919663635559?text=" +
-            waText +
-            '">9663635559</a>, or call <a href="tel:+919663635559">9663635559</a>.',
-          true,
-          true
-        );
+        const fallback =
+          'Email <a href="mailto:info@buildabo.in">info@buildabo.in</a>, WhatsApp <a href="https://wa.me/919663635559?text=' +
+          waText +
+          '">9663635559</a>, or call <a href="tel:+919663635559">9663635559</a>.';
+        if (err && err.message === "ACTIVATE") {
+          setStatus(
+            "Open the inbox for <a href=\"mailto:info@buildabo.in\">info@buildabo.in</a> and click FormSubmit’s <strong>Activate Form</strong> link (check spam). Then submit this form again. Until then, " +
+              fallback,
+            true,
+            true
+          );
+        } else {
+          setStatus("We couldn’t send that just now. " + fallback, true, true);
+        }
       } finally {
         if (submit) submit.disabled = false;
       }
