@@ -1435,14 +1435,14 @@ body.lead-open { overflow: hidden; }
 
 /* Process */
 .process-wrap {
-  background: var(--sandstone) url("../assets/process-bg-l.png") left bottom / auto no-repeat;
+  background: var(--sandstone) url("../assets/process-bg-l.webp") left bottom / auto no-repeat;
   position: relative;
 }
 .process-wrap::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("../assets/process-bg-r.png") right bottom / auto no-repeat;
+  background: url("../assets/process-bg-r.webp") right bottom / auto no-repeat;
   pointer-events: none;
 }
 .process-cards {
